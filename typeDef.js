@@ -3,42 +3,82 @@ const { gql } = require('apollo-server-express')
 //Nodemon
 const typeDefs = gql`
     type Usuario{
-        nombre: String
-        identificacion: Int
-        estado: String
+        idUsuario: Int
         email: String
-        perfil: String
+        nombre: String
+        estado: String  
+        rol: String
     }
-    type Proyecto{
-        lider: String
-        facultad: String
-        nombre:String
-        integrantes:[Usuario]
+
+    type inscripciones{
+        idEstudiante : Int
+        idInscripcion :String
+        estadoInscripcion :String
+        faseInscripcion : String
+    }
+    type lider{
+        idLider: Int
+        nombreLider:String
+    }
+    type Proyectos{
+        idProyecto: String
+        nombreProyecto:String
+        lider:[lider]
+        inscripciones:[inscripciones]
+        estadoProyecto:String
+        presupuesto:Int
     }
     type Query{
-        usuarios: [Usuario]
-        usuario(identificacion: Int): Usuario
-        proyectos:[Proyecto]
-        getProject(nombre:String):Proyecto
+        usuarios: [Usuario] 
+        usuario(idUsuario: Int): Usuario
+        getUsuario(idUsuario:Int):Usuario
+        getUsuarioNombre(nombre:String):Usuario
+        getUsuarioId(idUsuario: Int):Usuario
+        getUsuarioRol(rol:String):Usuario
+        proyectos:[Proyectos]
+        getProject(nombreProyecto:String):Proyectos
+        getProjectId(idProyecto:String):Proyectos
+        lider:[lider]
+    }
+    input liderInput{
+        idLider: Int
+        nombreLider:String        
     }
     input UserInput{
+        idUsuario:Int
         nombre: String
-        identificacion:Int
+        email : String
         clave: String
-        perfil: String
+        estado:String
+        rol: String
     }
     input ProjectInput{
-        nombre: String
+        idProyecto: String
+        nombreProyecto: String
+        objetivosGenerales: String
+        faseProyecto : String
+        estadoProyecto: String
         lider:String
-        facultad: String
+        presupuesto: Int
     }
+
+    input inscripcionesInput{
+
+        idInscripcion :String
+        estadoInscripcion :String
+        faseInscripcion : String
+    }
+
     type Mutation{
         createUser(user:UserInput):String
         createProject(project:ProjectInput):String
-        activeUser(identificacion:Int):String
-        deleteUser(ident:Int):String
+        activeUser(idUsuario:Int):String
+        deleteUser(idUsuario:Int):String
         deleteProject(nombreProyecto:String):String
-        insertUserToProject(identificacion:Int,nombreProyecto:String):String
+        insertUserToProject(idUsuario:Int, nombreProyecto:String, idInscripcion:String):String
+        activeProjet(idProyecto:String):String
     }
 `
 module.exports = typeDefs
+
+//        createProject(project:ProjectInput,lider:liderInput):String

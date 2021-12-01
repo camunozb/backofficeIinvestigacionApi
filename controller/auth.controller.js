@@ -4,7 +4,7 @@ let aes256 = require('aes256');
 const key = 'CLAVEDIFICIL';
 
 /*
-    401 -> no autorizado
+    401 -> no activo
     403 -> Recurso probihido para el rol actual
     404 -> not found - Recurso que pediste no exist
     400 -> Enviaste algo que no era o bad Request

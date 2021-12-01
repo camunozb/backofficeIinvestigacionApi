@@ -1,15 +1,34 @@
+const { __DirectiveLocation } = require('graphql')
 const Project = require('../model/proyectoModel')
 const User = require('../model/usuarioModel')
 
-const addUserProject = async (identificacion, nombreProyecto) => {
-    const user = await User.findOne({ identificacion })
-    if (user && user.estado === "Activo") {
+
+const addUserProject = async (idUsuario, nombreProyecto, idInscripcion) => {
+    const user = await User.findOne({ idUsuario })
+    const existe = idUsuario
+    if (user && user.estado === "activo") {
         const project = await Project.findOne({ nombre: nombreProyecto })
+        //console.log(project.activo)
         if (project && project.activo) {
-            if (project.integrantes.find(i => i == user._id)) {
+            //console.log("Primer if")
+            console.log(idUsuario, existe, user._id)
+            if (project.inscripciones.find(i => i == user._id)){
+            //if (project.inscripciones.find(existe == user.idUsuario)) {
+                console.log(i, user._id, "Segundo if")
                 return "El usuario ya pertenece al proyecto indicado"
+                
             } else {
-                await Project.updateOne({ nombre: nombreProyecto }, { $push: { integrantes: user._id } })
+                await Project.updateOne({ nombre: nombreProyecto },
+                    {
+                        $push: {
+                            inscripciones: [user._id,
+                                "Id Estudiante: " + user.idUsuario,
+                                "Nombre estudiante: " + user.nombre,
+                                "Id inscripcion: " + "101AAA",
+                                "Estado: " + "inactivo",
+                                "fase: " + "nula"]
+                        }
+                    })
                 return "Usuario adicionado correctamente"
             }
         } else {
@@ -33,15 +52,19 @@ const deleteProject = (nombreProyecto) => {
         .catch(err => "Fallo la eliminacion");
 }
 
-const proyectos = async () => await Project.find({}).populate("integrantes")
+const proyectos = async () => await Project.find({}).populate("inscripciones")
 
-const getProject = async (nombre) => await Project.findOne({ nombre })
+const getProject = async (nombreProyecto) => await Project.findOne({ nombreProyecto })
+
+const getProjectId= async (idProyecto) => await Project.findOne({idProyecto})
 
 
 module.exports = {
     addUserProject,
     getProject,
+    getProjectId,
     proyectos,
     deleteProject,
     createProject
+    
 }
