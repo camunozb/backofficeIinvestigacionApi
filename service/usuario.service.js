@@ -1,24 +1,24 @@
 const User = require('../model/usuarioModel')
 
-
-const buscarUsuarioPorIdentificacion = (identi) => listaUsuarios.find(user => user.idUsuario=== identi)
-
-const usuarios = async () => await User.find({})
+const usuarios = async () => await User.find({})//.populate("inscripciones")
 
 const getUsuarioNombre = async (nombre) => await User.findOne({ nombre })
 
 const getUsuarioId = async (idUsuario) => await User.findOne({ idUsuario })
 
-//const getUsuarioRol = async (rol) => await User.find({ rol })
-const getUsuarioRol = async () => await User.find({ rol })
+const getUsuariorol = async (rol) => await User.find({ rol })
+
+const getrol= async(rol) => await User.findOne({ rol })
+
+//const getUsuariorol = async (rol) => await User.find({ rol })
 
 
 module.exports = {
-    //buscarUsuarioPorIdentificacion,
     usuarios,
     getUsuarioId,
     getUsuarioNombre,
-    getUsuarioRol
+    getUsuariorol,
+    getrol
 }
 
 //.populate("inscripciones")

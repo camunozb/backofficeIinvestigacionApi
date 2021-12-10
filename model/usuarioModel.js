@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { estudiante } = require('../middleware/authjwt')
 const User = require('../model/usuarioModel')
 
 const usuario = new Schema({
@@ -17,15 +18,16 @@ const usuario = new Schema({
     },
     estado: {
         type: String,
-        default: "pendiente"
+        //default: "pendiente"
     },
     rol: {
         type: String,
-        required: true
+        required: true,
     },
     clave: {
         type: String,
         required: true
-    }
+    },
+
 })
 module.exports = model('usuarios', usuario,"usuarios" )

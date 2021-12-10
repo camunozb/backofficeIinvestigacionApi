@@ -1,34 +1,19 @@
-const { __DirectiveLocation } = require('graphql')
 const Project = require('../model/proyectoModel')
 const User = require('../model/usuarioModel')
 
 
+
 const addUserProject = async (idUsuario, nombreProyecto, idInscripcion) => {
     const user = await User.findOne({ idUsuario })
-    const existe = idUsuario
-    if (user && user.estado === "activo") {
+    if (user && user.estado === "Activo") {
         const project = await Project.findOne({ nombre: nombreProyecto })
-        //console.log(project.activo)
         if (project && project.activo) {
-            //console.log("Primer if")
-            console.log(idUsuario, existe, user._id)
             if (project.inscripciones.find(i => i == user._id)){
-            //if (project.inscripciones.find(existe == user.idUsuario)) {
                 console.log(i, user._id, "Segundo if")
-                return "El usuario ya pertenece al proyecto indicado"
-                
+                return "El usuario ya pertenece al proyecto indicado"    
             } else {
                 await Project.updateOne({ nombre: nombreProyecto },
-                    {
-                        $push: {
-                            inscripciones: [user._id,
-                                "Id Estudiante: " + user.idUsuario,
-                                "Nombre estudiante: " + user.nombre,
-                                "Id inscripcion: " + "101AAA",
-                                "Estado: " + "inactivo",
-                                "fase: " + "nula"]
-                        }
-                    })
+                    { $push: { inscripciones: [user.idUsuario, user.nombre] }})
                 return "Usuario adicionado correctamente"
             }
         } else {
@@ -52,19 +37,39 @@ const deleteProject = (nombreProyecto) => {
         .catch(err => "Fallo la eliminacion");
 }
 
-const proyectos = async () => await Project.find({}).populate("inscripciones")
+// const modificarFase = async (idProyecto) => {
+//     const project = await Project.findOne({ idProyecto })
+//      if (project.faseProyecto === "en desarrollo") {
+//          console.log("Fase del proyecto: ", project.faseProyecto, idProyecto)
+//          return  Project.updateOne({ fase: project.idProyecto }, { faseProyecto: "terminado" }),
+//              console.log(idProyecto, project.idProyecto, "Fasemodificada")
+//              //.then(u => "Fase actualizada")
+//              //.catch(err => "Fallo la actualización de la fase");  
+//      }
+// }
 
-const getProject = async (nombreProyecto) => await Project.findOne({ nombreProyecto })
+const proyectos = async () => await Project.find({}).populate("lider")
 
-const getProjectId= async (idProyecto) => await Project.findOne({idProyecto})
+const getProjectNombre = async (nombreProyecto) => await Project.findOne({ nombreProyecto }).populate("lider")
+
+const getProjectId = async (idProyecto) => await Project.findOne({ idProyecto }).populate("lider")
+
+const getProjectLider = async (lider) => await Project.find({ lider })
+
+//const rolEstudiante = async (rol) => await User.find({ rol: "estudiante" })
+
+
+
 
 
 module.exports = {
     addUserProject,
-    getProject,
+    getProjectNombre,
     getProjectId,
+    getProjectLider,
     proyectos,
     deleteProject,
-    createProject
+    createProject,
+
     
 }
