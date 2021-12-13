@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose')
 const { estudiante } = require('../middleware/authjwt')
 const User = require('../model/usuarioModel')
-
+const proyecto = require('./proyectoModel') 
 const usuario = new Schema({
     idUsuario: {
         type: Number,
@@ -30,4 +30,4 @@ const usuario = new Schema({
     },
 
 })
-module.exports = model('usuarios', usuario,"usuarios" )
+module.exports = model("usuarios", usuario)

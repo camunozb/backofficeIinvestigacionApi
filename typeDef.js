@@ -43,17 +43,9 @@ const typeDefs = gql`
     }
     type Query{
         usuarios: [Usuario]
-        Usuarios: [Usuario]
         getUsuarioNombre(nombre:String):Usuario
         getUsuarioId(idUsuario: Int):Usuario
-
-
-        getUsuariorol(rol:String):String
-
-        getrol(rol:String):Usuario
-
-
-
+        getUsuarioRol(rol:String):String
         rolProject(rol:String):Usuario
         rolEstudiante(rol:String):String
         proyectos:[Proyectos]
@@ -62,8 +54,7 @@ const typeDefs = gql`
         getProjectLider(Usuario:String):Proyectos
         lider(rol:String!):Usuario
         estudiante(rol:String):Usuario
-        rol:[Usuario]
-    }
+        }
     input camposAvances{
         _id:String
         idEstudiante: Int
@@ -155,5 +146,5 @@ const typeDefs = gql`
         editarAvances(idProyecto:String!, idAvance:String, campos: camposAvances):Proyectos
 
     }
-`
-module.exports = typeDefs
+`;
+module.exports = {typeDefs}

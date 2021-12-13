@@ -10,13 +10,13 @@ const {
 const { usuarios,
   getUsuarioNombre,
   getUsuarioId,
-  getUsuariorol } = require('./service/usuario.service')
+  getUsuarioRol,
+  }=require('./service/usuario.service')
 const Project = require('./model/proyectoModel')
 const User = require('./model/usuarioModel')
 let aes256 = require('aes256')
 const { isLider, estudiante } = require('./middleware/authjwt')
 const jwt = require('jsonwebtoken')
-
 
 const key = 'CLAVEDIFICIL';
 
@@ -25,10 +25,8 @@ const resolvers = {
     usuarios: async () => usuarios(),
     getUsuarioNombre: async (parent, args, context, info) => getUsuarioNombre(args.nombre),
     getUsuarioId: async (parent, args, context, info) => getUsuarioId(args.idUsuario),
-
-
-    getUsuariorol: async (parent, args, context, info) => getUsuariorol(arg.rol),
-    
+    getUsuarioRol: async (parent, args) => getUsuarioRol(args.rol),
+   
     proyectos: async (parent, args, context, info) => {
       return proyectos()
     },
@@ -182,4 +180,6 @@ const resolvers = {
 
  }
 }
-module.exports = resolvers
+module.exports = {
+  resolvers
+}
