@@ -3,47 +3,72 @@ const { gql } = require('apollo-server-express')
 //Nodemon
 const typeDefs = gql`
     type Usuario{
-        idUsuario: Int
-        email: String
-        nombre: String
-        estado: String  
-        rol: String
+        _id:String!
+        idUsuario:Int!
+        email:String!
+        nombre:String!
+        estado:String! 
+        rol:String!
     }
 
-    type inscripciones{
-        idEstudiante : Int
-        idInscripcion :String
-        estadoInscripcion :String
-        faseInscripcion : String
-    }
     type lider{
-        idLider: Int
-        nombreLider:String
+        _id: String
+        idUsuario:String
+    }
+    type inscripciones{
+        _id:String
+        idEstudiante: Int
+        idInscripcion: String
+        estadoInscripcion: String
+        faseInscripcion:String
+    }
+
+    type avances{
+        _id:String
+        idEstudiante: Int
+        idAvance: String
+        descripcion: String
+        observaciones:String
     }
     type Proyectos{
-        idProyecto: String
-        nombreProyecto:String
-        lider:[lider]
+        _id:String
+        idProyecto:String!
+        nombreProyecto:String!
+        objetivosGenerales:String
+        lider:Usuario
         inscripciones:[inscripciones]
+        avances:[avances]
+        faseProyecto:String
         estadoProyecto:String
-        presupuesto:Int
+        presupuesto:Float
+    }
+        input filtroUsuarios{
+        _id:String
+        idUsuario:Int
+        email:String
+        estado:String 
+        rol:String   
     }
     type Query{
-        usuarios: [Usuario] 
-        usuario(idUsuario: Int): Usuario
-        getUsuario(idUsuario:Int):Usuario
+        usuarios: [Usuario]
+        Usuarios(filtro:filtroUsuarios):[Usuario]
+        Usuario(_id:String!):Usuario
         getUsuarioNombre(nombre:String):Usuario
         getUsuarioId(idUsuario: Int):Usuario
-        getUsuarioRol(rol:String):Usuario
-        proyectos:[Proyectos]
-        getProject(nombreProyecto:String):Proyectos
-        getProjectId(idProyecto:String):Proyectos
-        lider:[lider]
+        rolProject(rol:String):Usuario
+        proyectos: [Proyectos]
+        getProjectNombre(nombreProyecto:String):Proyectos
+        getProjectId(idProyecto:String):[Proyectos]
+        getProjectLider(idUsuario:Int):Proyectos
+        rol:[Usuario]
     }
-    input liderInput{
-        idLider: Int
-        nombreLider:String        
+    input camposAvances{
+        _id:String
+        idEstudiante: Int
+        idAvance: String
+        descripcion: String
     }
+
     input UserInput{
         idUsuario:Int
         nombre: String
@@ -56,17 +81,19 @@ const typeDefs = gql`
         idProyecto: String
         nombreProyecto: String
         objetivosGenerales: String
-        faseProyecto : String
-        estadoProyecto: String
         lider:String
-        presupuesto: Int
+        estadoProyecto:String
+        faseProyecto:String
+        presupuesto:Float
     }
 
     input inscripcionesInput{
-
-        idInscripcion :String
-        estadoInscripcion :String
-        faseInscripcion : String
+         _id: String,
+        idUsuario: Int,
+        nombre: String,
+        idInscripcion: String,
+        estadoInscripcion: String,
+        faseInscripcion: String
     }
 
     type Mutation{
@@ -76,7 +103,55 @@ const typeDefs = gql`
         deleteUser(idUsuario:Int):String
         deleteProject(nombreProyecto:String):String
         insertUserToProject(idUsuario:Int, nombreProyecto:String, idInscripcion:String):String
-        activeProjet(idProyecto:String):String
+        activeProject(idProyecto:String):String
+        cambiarFase(idProyecto:String):String
+        updateFase(_id:String):String
+        autenticar(usuario:String, clave:String):String
+
+        crearInscripcion(
+            _id:String!
+            idUsuario: Int
+            idInscripcion: String
+            estadoInscripcion: String):Proyectos
+
+        crearAvance(
+            _id:String
+            idUsuario: Int
+            idAvance: String
+            descripcion: String
+            observaciones:String):Proyectos
+
+        crearObservacionAvance(
+            _id:String
+            idAvance: String
+            observaciones:String):Proyectos
+
+
+        editarUsuario(
+             _id:String!
+            idUsuario:Int!
+            nombre:String!
+            email:String!
+            estado:String!
+            rol:String!
+        ):Usuario
+
+        editarProyecto(
+            _id: String!
+            idProyecto: String!
+            nombreProyecto: String!
+            objetivosGenerales: String!
+            presupuesto: Float!
+        ):Proyectos
+
+        modificarInscripcion(
+            _id: String
+            idEstudiante:Int
+            idInscripcion:String
+            estadoInscripcion:String):Proyectos
+
+        editarAvances(idProyecto:String!, idAvance:String, campos: camposAvances):Proyectos
+
     }
 `
 module.exports = typeDefs

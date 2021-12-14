@@ -17,8 +17,8 @@ const usuario = new Schema({
         unique: true
     },
     estado: {
-        type: String,
-        //default: "pendiente"
+       type: String,
+       default: "pendiente"
     },
     rol: {
         type: String,
